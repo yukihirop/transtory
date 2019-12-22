@@ -1,0 +1,8 @@
+{
+  "name": "transtory",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:yukihirop/transtory.git",
+  "author": "yukihirop <te108186@gmail.com>",
+  "license": "MIT"
+}
