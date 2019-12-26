@@ -1,0 +1,16 @@
+---
+version: 1.0
+sheet:
+  openAPIV3Schema:
+    gss:
+      type: object
+      properties:
+        ja:
+          type: string
+          description: 日本語
+        en:
+          type: string
+          description: 英語
+        key:
+          type: string
+          description: キー

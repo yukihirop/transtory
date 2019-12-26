@@ -1,5 +1,12 @@
+'use strict';
+
 const GSSValidator = require('../validators/GSSValidator');
 const Client = require('./GSSClient');
+const nestedProperty = require('nested-property');
+
+const fs = require('fs')
+  , path = require('path')
+  , yaml = require('js-yaml');
 
 const _mergedDefaultOptions = (opts) => {
   const defaultOpts = {
@@ -14,9 +21,13 @@ function GSS(uri, creds, opts) {
   validator.isSpreadSheetURL()
 
   opts = _mergedDefaultOptions(opts);
-  var worksheetIndex = opts.worksheetIndex;
 
-  client = Client(uri, creds, opts);
+  var { worksheetIndex, settingPath } = opts;
+  var yamlText = fs.readFileSync(path.join(settingPath), 'utf-8')
+    , yamlData = yaml.safeLoad(yamlText)
+    , sheetSchema = yamlData["sheet"]["gss"]["openAPIV3Schema"]["properties"];
+
+  var client = Client(uri, creds, opts);
 
   const getInfo = (callback) => {
     return client.then(doc => {
@@ -48,9 +59,44 @@ function GSS(uri, creds, opts) {
     });
   };
 
+  const rows2Json = (rows) => {
+    var translateHumanKey = _translateHumanKey(sheetSchema);
+    var translateKey, langHuman;
+    var result = {};
+
+    _languages(sheetSchema).forEach(lang => {
+      result[lang] = {};
+      langHuman = sheetSchema[lang]['description'];
+
+      rows.forEach(row => {
+        translateKey = row[translateHumanKey];
+        nestedProperty.set(result, `${lang}.${translateKey}`, row[langHuman]);
+      });
+    });
+
+    return result
+  }
+
+  // private
+
+  const _languages = (sheetSchema) => {
+    const keys = Object.keys(sheetSchema)
+
+    keys.some((key, i) => {
+      if (key === 'key') keys.splice(i, 1)
+    });
+
+    return keys
+  }
+
+  const _translateHumanKey = (sheetSchema) => {
+    return sheetSchema['key']['description']
+  }
+
   return {
     getInfo,
     getRows,
+    rows2Json,
   }
 }
 

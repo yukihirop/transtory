@@ -6,7 +6,9 @@
   "author": "yukihirop <te108186@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "google-spreadsheet": "^2.0.8"
+    "google-spreadsheet": "^2.0.8",
+    "js-yaml": "^3.13.1",
+    "nested-property": "^1.0.2"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",

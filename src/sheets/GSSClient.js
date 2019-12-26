@@ -1,3 +1,5 @@
+'use strict';
+
 const GoogleSpreadSheet = require('google-spreadsheet');
 
 const _createSheetId = (uri, baseURL) => {
