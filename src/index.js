@@ -1,11 +1,5 @@
 const GoogleSpreadSheet = require('./sheets/GSS')
   , AppLocale = require('./Locale')
-  , fs = require('fs')
-  , path = require('path');
-
-const currentPath = fs.realpathSync('./')
-  , settingTemplatePath = path.resolve(__dirname, './template/transtory.yaml')
-  , settingData = fs.readFileSync(path.join(settingTemplatePath), 'utf-8');
 
 module.exports = function transtory(uri, opts) {
   const defaultOpts = {
@@ -15,8 +9,6 @@ module.exports = function transtory(uri, opts) {
     settingPath: `./.transtory`
   };
   const options = Object.assign({}, defaultOpts, opts)
-
-
 
   var locale = AppLocale(options);
   var sheet
