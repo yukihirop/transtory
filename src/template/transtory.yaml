@@ -1,0 +1,20 @@
+---
+version: 1.0
+sheet:
+  gss:
+    openAPIV3Schema:
+      type: object
+      properties:
+        ja:
+          type: string
+          description: 日本語
+        en:
+          type: string
+          description: 英語
+        key:
+          type: string
+          description: キー
+locale:
+  distDirPath: ./dist/locales
+auth:
+  credPath: ./creds.json
