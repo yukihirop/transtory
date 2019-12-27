@@ -1,4 +1,5 @@
 const GoogleSpreadSheet = require('./sheets/GSS')
+  , AppLocale = require('./Locale')
   , fs = require('fs')
   , path = require('path');
 
@@ -12,10 +13,13 @@ module.exports = function transtory(uri, creds, opts) {
     baseURL: 'https://docs.google.com/spreadsheets/d/',
     creds: creds,
     worksheetIndex: 0,
-    settingPath: `${currentPath}/.transtory`
+    settingPath: `./.transtory`
   };
   const options = Object.assign({}, defaultOpts, opts)
 
+
+
+  var locale = AppLocale(options);
   var sheet
   switch (options.type) {
     case 'GoogleSpreadSheet':
@@ -31,7 +35,16 @@ module.exports = function transtory(uri, creds, opts) {
     });
   }
 
+  var Locale = {}
+  Locale.update = (worksheet_id = 1, callback) => {
+    Sheet.fetch(worksheet_id, (result) => {
+      locale.updateLocale(result);
+      if (callback) callback();
+    });
+  }
+
   return {
     Sheet,
+    Locale
   }
 }

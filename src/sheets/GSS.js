@@ -3,10 +3,7 @@
 const GSSValidator = require('../validators/GSSValidator');
 const Client = require('./GSSClient');
 const nestedProperty = require('nested-property');
-
-const fs = require('fs')
-  , path = require('path')
-  , yaml = require('js-yaml');
+const { yamlSafeLoad } = require('../utils/file');
 
 const _mergedDefaultOptions = (opts) => {
   const defaultOpts = {
@@ -23,8 +20,7 @@ function GSS(uri, creds, opts) {
   opts = _mergedDefaultOptions(opts);
 
   var { worksheetIndex, settingPath } = opts;
-  var yamlText = fs.readFileSync(path.join(settingPath), 'utf-8')
-    , yamlData = yaml.safeLoad(yamlText)
+  var yamlData = yamlSafeLoad(settingPath)
     , sheetSchema = yamlData["sheet"]["gss"]["openAPIV3Schema"]["properties"];
 
   var client = Client(uri, creds, opts);

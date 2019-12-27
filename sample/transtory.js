@@ -10,3 +10,5 @@ var client = transtory(
 client.Sheet.fetch(1, (result) => {
   console.log(JSON.stringify(result));
 });
+
+client.Locale.update(1);

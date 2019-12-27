@@ -1,8 +1,8 @@
 ---
 version: 1.0
 sheet:
-  openAPIV3Schema:
-    gss:
+  gss:
+    openAPIV3Schema:
       type: object
       properties:
         ja:
@@ -14,3 +14,5 @@ sheet:
         key:
           type: string
           description: キー
+locale:
+  distDirPath: ./dist/locales
