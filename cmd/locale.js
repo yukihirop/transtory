@@ -25,7 +25,9 @@ function LocaleCmd() {
       const { type, worksheetIndex } = options;
       transtory(url, {
         type: type
-      }).Locale.update(worksheetIndex);
+      }).Locale.update(worksheetIndex, (langFile) => {
+        console.log(`updated locale file: ${langFile}`);
+      });
     });
 
   return localeCmd;

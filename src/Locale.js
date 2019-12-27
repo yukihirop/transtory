@@ -20,9 +20,11 @@ function Locale(opts) {
     e.x.)
     result = {"ja":{"common":{"text":{"hello":"こんにちは","good_night":"おやすみなさい"}}},"en":{"common":{"text":{"hello":"hello","good_night":"good night"}}}}
   */
-  const updateLocale = (result) => {
+  const updateLocale = (result, callback) => {
     Object.keys(result).forEach(lang => {
-      yamlDumpWriteSyncFile(`${distDirPath}/${lang}.yaml`, result[lang]);
+      const langFile = `${distDirPath}/${lang}.yaml`;
+      yamlDumpWriteSyncFile(langFile, result[lang]);
+      if (callback) callback(langFile);
     });
   }
 

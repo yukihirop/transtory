@@ -37,8 +37,9 @@ module.exports = function transtory(uri, opts) {
   var Locale = {}
   Locale.update = (worksheet_id = 1, callback) => {
     Sheet.fetch(worksheet_id, (result) => {
-      locale.updateLocale(result);
-      if (callback) callback();
+      locale.updateLocale(result, langFile => {
+        if (callback) callback(langFile);
+      });
     });
   }
 
