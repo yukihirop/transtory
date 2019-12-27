@@ -12,7 +12,7 @@ const _mergedDefaultOptions = (opts) => {
   return Object.assign({}, defaultOpts, opts)
 }
 
-function GSS(uri, creds, opts) {
+function GSS(uri, opts) {
   const baseURL = opts.baseURL
   const validator = GSSValidator(uri, baseURL)
   validator.isSpreadSheetURL()
@@ -23,7 +23,7 @@ function GSS(uri, creds, opts) {
   var yamlData = yamlSafeLoad(settingPath)
     , sheetSchema = yamlData["sheet"]["gss"]["openAPIV3Schema"]["properties"];
 
-  var client = Client(uri, creds, opts);
+  var client = Client(uri, opts);
 
   const getInfo = (callback) => {
     return client.then(doc => {

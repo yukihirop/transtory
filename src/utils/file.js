@@ -50,10 +50,16 @@ const yamlDumpWriteSyncFile = (file, data) => {
   writeSyncFile(file, yamlText);
 }
 
+const jsonSafeLoad = (file) => {
+  fullPath = path.resolve(currentPath, file);
+  return require(fullPath);
+}
+
 module.exports = {
   isExistFile,
   writeSyncFile,
   mkdirSyncRecursive,
   yamlSafeLoad,
   yamlDumpWriteSyncFile,
+  jsonSafeLoad,
 }

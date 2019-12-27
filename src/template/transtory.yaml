@@ -16,3 +16,5 @@ sheet:
           description: キー
 locale:
   distDirPath: ./dist/locales
+auth:
+  credPath: ./creds.json

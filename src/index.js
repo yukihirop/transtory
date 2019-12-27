@@ -7,11 +7,10 @@ const currentPath = fs.realpathSync('./')
   , settingTemplatePath = path.resolve(__dirname, './template/transtory.yaml')
   , settingData = fs.readFileSync(path.join(settingTemplatePath), 'utf-8');
 
-module.exports = function transtory(uri, creds, opts) {
+module.exports = function transtory(uri, opts) {
   const defaultOpts = {
     type: 'GoogleSpreadSheet',
     baseURL: 'https://docs.google.com/spreadsheets/d/',
-    creds: creds,
     worksheetIndex: 0,
     settingPath: `./.transtory`
   };
@@ -23,7 +22,7 @@ module.exports = function transtory(uri, creds, opts) {
   var sheet
   switch (options.type) {
     case 'GoogleSpreadSheet':
-      sheet = GoogleSpreadSheet(uri, creds, options)
+      sheet = GoogleSpreadSheet(uri, options)
       break;
   }
 
