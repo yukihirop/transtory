@@ -76,3 +76,7 @@ locale:
 auth:
   credPath: ./creds.json
 ```
+
+Note: 
+
+The name "key" is a reserved word. Be sure to use this name.
