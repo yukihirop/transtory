@@ -44,6 +44,10 @@ module.exports = function transtory(opts) {
     locale.getLocale(langName, extName, callback)
   }
 
+  Locale.getAll = (callback) => {
+    locale.getLocaleAll(callback)
+  }
+
   return {
     Sheet,
     Locale

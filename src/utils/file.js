@@ -38,9 +38,14 @@ const mkdirSyncRecursive = (dir) => {
   }, '');
 }
 
-const yamlSafeLoad = (file, encoding = 'utf-8') => {
-  fullPath = path.resolve(currentPath, file)
-  var yamlText = fs.readFileSync(fullPath, encoding)
+const yamlSafeLoad = (file, isRelative = true, encoding = 'utf-8') => {
+  var loadPath = file;
+
+  if (isRelative) {
+    loadPath = path.resolve(currentPath, file)
+  }
+
+  var yamlText = fs.readFileSync(loadPath, encoding)
     , yamlData = yaml.safeLoad(yamlText);
   return yamlData
 }
@@ -59,6 +64,10 @@ const packageJSON = () => {
   return require(`${currentPath}/package.json`);
 }
 
+const absolutePath = (file) => {
+  return path.resolve(currentPath, file);
+}
+
 module.exports = {
   isExistFile,
   writeSyncFile,
@@ -67,4 +76,5 @@ module.exports = {
   yamlDumpWriteSyncFile,
   jsonSafeLoad,
   packageJSON,
+  absolutePath,
 }

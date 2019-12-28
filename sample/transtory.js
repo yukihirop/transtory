@@ -20,3 +20,7 @@ client.Locale.get('ja', 'yaml', (result) => {
 client.Locale.get('en', 'yaml', (result) => {
   console.log(JSON.stringify(result));
 });
+
+client.Locale.getAll((result) => {
+  console.log(JSON.stringify(result, null, 2));
+});

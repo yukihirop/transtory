@@ -1,6 +1,13 @@
 'use strict';
 
-const { mkdirSyncRecursive, yamlSafeLoad, yamlDumpWriteSyncFile } = require('./utils/file');
+const recursive = require('recursive-readdir');
+const {
+  mkdirSyncRecursive,
+  yamlSafeLoad,
+  yamlDumpWriteSyncFile,
+  walk,
+  absolutePath
+} = require('./utils/file');
 
 const _mergedDefaultOptions = (opts) => {
   const defaultOpts = {};
@@ -23,7 +30,11 @@ function Locale(opts) {
   const updateLocale = (result, callback) => {
     Object.keys(result).forEach(lang => {
       const langFile = `${distDirPath}/${lang}.yaml`;
-      yamlDumpWriteSyncFile(langFile, result[lang]);
+
+      var langResult = {};
+      langResult[lang] = result[lang];
+      yamlDumpWriteSyncFile(langFile, langResult);
+
       if (callback) callback(langFile);
     });
   }
@@ -36,9 +47,28 @@ function Locale(opts) {
     if (callback) callback(result);
   }
 
+  const getLocaleAll = (callback) => {
+    var fullPath = absolutePath(distDirPath)
+      , result = {}
+      , yamlData = {};
+
+    recursive(fullPath, (err, files) => {
+      if (err) throw err;
+
+      result = files.reduce((acc, file) => {
+        yamlData = yamlSafeLoad(file, false);
+        Object.assign(acc, yamlData);
+        return acc;
+      }, {});
+
+      if (callback) callback(result);
+    })
+  }
+
   return {
     updateLocale,
-    getLocale
+    getLocale,
+    getLocaleAll
   }
 }
 

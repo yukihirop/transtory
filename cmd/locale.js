@@ -32,7 +32,7 @@ function LocaleCmd() {
     });
 
   localeCmd
-    .command('get <langName>')
+    .command('get [langName]')
     .description('get locale from local')
     .option(
       '-e, --extName <extName>',
@@ -41,9 +41,15 @@ function LocaleCmd() {
     )
     .action((langName, options) => {
       const { extName } = options;
-      transtory().Locale.get(langName, extName, (result) => {
-        console.log(JSON.stringify(result, null, 2));
-      });
+      if (langName) {
+        transtory().Locale.get(langName, extName, (result) => {
+          console.log(JSON.stringify(result, null, 2));
+        });
+      } else {
+        transtory().Locale.getAll((result) => {
+          console.log(JSON.stringify(result, null, 2));
+        });
+      }
     });
 
   return localeCmd;
