@@ -75,6 +75,7 @@ sheet:
         key:
           type: string
           description: キー
+    langPrefix: true
 locale:
   distDirPath: ./dist/locales
 auth:

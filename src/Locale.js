@@ -40,11 +40,9 @@ function Locale(opts) {
   }
 
   const getLocale = (langName, extName = 'yaml', callback) => {
-    const yamlData = yamlSafeLoad(`${distDirPath}/${langName}.${extName}`)
-      , result = {};
+    const yamlData = yamlSafeLoad(`${distDirPath}/${langName}.${extName}`);
 
-    result[langName] = yamlData;
-    if (callback) callback(result);
+    if (callback) callback(yamlData);
   }
 
   const getLocaleAll = (callback) => {

@@ -1,3 +1,7 @@
+'use strict';
+
+require('date-utils');
+
 const GoogleSpreadSheet = require('./sheets/GSS')
   , AppLocale = require('./Locale')
 
@@ -29,6 +33,10 @@ module.exports = function transtory(opts) {
         var result = sheet.rows2Json(rows);
         if (callback) callback(result);
       });
+    }
+
+    Sheet.push = (worksheetName = (new Date()).toFormat('YYYY/MM/DD HH24:MI:SS'), callback) => {
+      sheet.pushRows(worksheetName, callback);
     }
 
     Locale.update = (worksheet_id = 1, callback) => {
