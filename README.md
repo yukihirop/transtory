@@ -56,7 +56,7 @@ The default settings are as follows:
 
 ```yaml
 ---
-version: 1.0
+version: '1.0.0'
 sheet:
   gss:
     openAPIV3Schema:

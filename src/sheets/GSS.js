@@ -1,6 +1,7 @@
 'use strict';
 
 const GSSValidator = require('../validators/GSSValidator');
+const ConfigValidator = require('../validators/ConfigValidator');
 const Client = require('./GSSClient');
 const nestedProperty = require('nested-property');
 const { yamlSafeLoad } = require('../utils/file');
@@ -13,13 +14,16 @@ const _mergedDefaultOptions = (opts) => {
 }
 
 function GSS(uri, opts) {
-  const baseURL = opts.baseURL
-  const validator = GSSValidator(uri, baseURL)
-  validator.isSpreadSheetURL()
+  const { baseURL, settingPath, worksheetIndex } = opts;
+
+  const gssValidator = GSSValidator(uri, baseURL);
+  const configValidator = ConfigValidator(settingPath);
+
+  gssValidator.isSpreadSheetURL();
+  configValidator.isVersion();
 
   opts = _mergedDefaultOptions(opts);
 
-  var { worksheetIndex, settingPath } = opts;
   var yamlData = yamlSafeLoad(settingPath)
     , sheetSchema = yamlData["sheet"]["gss"]["openAPIV3Schema"]["properties"];
 

@@ -55,6 +55,10 @@ const jsonSafeLoad = (file) => {
   return require(fullPath);
 }
 
+const packageJSON = () => {
+  return require(`${currentPath}/package.json`);
+}
+
 module.exports = {
   isExistFile,
   writeSyncFile,
@@ -62,4 +66,5 @@ module.exports = {
   yamlSafeLoad,
   yamlDumpWriteSyncFile,
   jsonSafeLoad,
+  packageJSON,
 }
