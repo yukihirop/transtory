@@ -23,7 +23,8 @@ function SheetCmd() {
     )
     .action((url, options) => {
       const { type, worksheetIndex } = options;
-      transtory(url, {
+      transtory({
+        url: url,
         type: type
       }).Sheet.fetch(worksheetIndex, (result) => {
         console.log(JSON.stringify(result, null, 2));

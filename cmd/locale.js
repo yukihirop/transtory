@@ -23,10 +23,26 @@ function LocaleCmd() {
     )
     .action((url, options) => {
       const { type, worksheetIndex } = options;
-      transtory(url, {
+      transtory({
+        url: url,
         type: type
       }).Locale.update(worksheetIndex, (langFile) => {
         console.log(`updated locale file: ${langFile}`);
+      });
+    });
+
+  localeCmd
+    .command('get <langName>')
+    .description('get locale from local')
+    .option(
+      '-e, --extName <extName>',
+      'extension name',
+      'yaml'
+    )
+    .action((langName, options) => {
+      const { extName } = options;
+      transtory().Locale.get(langName, extName, (result) => {
+        console.log(JSON.stringify(result, null, 2));
       });
     });
 

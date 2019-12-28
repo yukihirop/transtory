@@ -28,8 +28,17 @@ function Locale(opts) {
     });
   }
 
+  const getLocale = (langName, extName = 'yaml', callback) => {
+    const yamlData = yamlSafeLoad(`${distDirPath}/${langName}.${extName}`)
+      , result = {};
+
+    result[langName] = yamlData;
+    if (callback) callback(result);
+  }
+
   return {
-    updateLocale
+    updateLocale,
+    getLocale
   }
 }
 

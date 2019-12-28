@@ -19,6 +19,8 @@ transtory init
 transtory sheet fetch <your/GoogleSpreadSheet/URL>
 # Update locales from GoogleSpreadSheet
 transtory locale update <your/GoogleSpreadSheet/URL>
+# Get locale(ja) from local
+transtory locale get ja
 ```
 
 ## 📖 Usage
