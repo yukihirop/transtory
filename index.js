@@ -11,6 +11,7 @@ const { Command } = require('./src/monkey_patches/commander')
   , localeCmd = require('./cmd/locale')();
 
 program
+  .name('trs')
   .version(pkg.version)
 
 program

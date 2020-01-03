@@ -11,29 +11,29 @@ npm install -g transtory
 ## 🚀 Tutorial
 
 ```bash
-transtory init
+trs init
 #
 # Configure .transtory
 #
 # Fetch rows from GoogleSpreadSheet
-transtory sheet fetch <your/GoogleSpreadSheet/URL>
+trs sheet fetch <your/GoogleSpreadSheet/URL>
 # Update locales from GoogleSpreadSheet
-transtory locale update <your/GoogleSpreadSheet/URL>
+trs locale update <your/GoogleSpreadSheet/URL>
 # Get locale(ja) from local
-transtory locale get ja
+trs locale get ja
 # Get all locales from local
-transtory locale get
+trs locale get
 # Push GoogleSpreadSheet from Local
-transtory sheet push <your/GoogleSpreadSheet/URL>
+trs sheet push <your/GoogleSpreadSheet/URL>
 # Add locale
-transtory locale add en en.common.text.good_bye "Good Bye"
+trs locale add en en.common.text.good_bye "Good Bye"
 ```
 
 ## 📖 Usage
 
 ```bash
-$ transtory -h
-Usage: transtory [options] [command]
+$ trs -h
+Usage: trs [options] [command]
 
 transtory cli
 
