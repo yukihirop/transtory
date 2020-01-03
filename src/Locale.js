@@ -1,6 +1,7 @@
 'use strict';
 
 const recursive = require('recursive-readdir');
+const nestedProperty = require('nested-property');
 const {
   mkdirSyncRecursive,
   yamlSafeLoad,
@@ -63,10 +64,21 @@ function Locale(opts) {
     })
   }
 
+  const addLocale = (key, value, langName, extName = 'yaml', callback) => {
+    const langFile = `${distDirPath}/${langName}.${extName}`;
+    const yamlData = yamlSafeLoad(langFile);
+    nestedProperty.set(yamlData, key, value);
+    yamlDumpWriteSyncFile(langFile, yamlData);
+
+    const writeData = nestedProperty.get(yamlData, key);
+    if (callback) callback({ [key]: writeData });
+  }
+
   return {
     updateLocale,
     getLocale,
-    getLocaleAll
+    getLocaleAll,
+    addLocale
   }
 }
 

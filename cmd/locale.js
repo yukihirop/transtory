@@ -52,6 +52,21 @@ function LocaleCmd() {
       }
     });
 
+  localeCmd
+    .command('add <langName> <key> <value>')
+    .description('add locale')
+    .option(
+      '-e, --extName <extName>',
+      'extension name',
+      'yaml'
+    )
+    .action((langName, key, value, options) => {
+      const { extname } = options;
+      transtory().Locale.add(key, value, langName, extname, (result) => {
+        console.log(JSON.stringify(result, null, 2));
+      });
+    });
+
   return localeCmd;
 }
 

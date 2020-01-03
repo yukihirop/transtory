@@ -29,3 +29,7 @@ var formatDate = (new Date()).toFormat('YYYY/MM/DD HH24:MI:SS');
 client.Sheet.push(formatDate, (result) => {
   console.log(result);
 });
+
+client.Locale.add('ja.common.text.good_bye', 'さようなら', 'ja', 'yaml', (result) => {
+  console.log(JSON.stringify(result, null, 2));
+});
