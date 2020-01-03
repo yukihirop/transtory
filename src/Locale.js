@@ -2,6 +2,7 @@
 
 const recursive = require('recursive-readdir');
 const nestedProperty = require('nested-property');
+const flatten = require('flat');
 const {
   mkdirSyncRecursive,
   yamlSafeLoad,
@@ -40,13 +41,17 @@ function Locale(opts) {
     });
   }
 
-  const getLocale = (langName, extName = 'yaml', callback) => {
-    const yamlData = yamlSafeLoad(`${distDirPath}/${langName}.${extName}`);
+  const getLocale = (langName, extName = 'yaml', isFlatten = false, callback) => {
+    var yamlData = yamlSafeLoad(`${distDirPath}/${langName}.${extName}`);
+
+    if (isFlatten) {
+      yamlData = flatten(yamlData);
+    }
 
     if (callback) callback(yamlData);
   }
 
-  const getLocaleAll = (callback) => {
+  const getLocaleAll = (isFlatten = false, callback) => {
     var fullPath = absolutePath(distDirPath)
       , result = {}
       , yamlData = {};
@@ -57,6 +62,11 @@ function Locale(opts) {
       result = files.reduce((acc, file) => {
         yamlData = yamlSafeLoad(file, false);
         Object.assign(acc, yamlData);
+
+        if (isFlatten) {
+          acc = flatten(acc);
+        }
+
         return acc;
       }, {});
 

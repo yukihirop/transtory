@@ -39,14 +39,20 @@ function LocaleCmd() {
       'extension name',
       'yaml'
     )
+    .option(
+      '-f, --flat [flat]',
+      'display flatten',
+      false,
+    )
     .action((langName, options) => {
-      const { extName } = options;
+      const { extName, flat } = options;
+      const isFlatten = (flat === 'true') ? true : false;
       if (langName) {
-        transtory().Locale.get(langName, extName, (result) => {
+        transtory().Locale.get(langName, extName, isFlatten, (result) => {
           console.log(JSON.stringify(result, null, 2));
         });
       } else {
-        transtory().Locale.getAll((result) => {
+        transtory().Locale.getAll(isFlatten, (result) => {
           console.log(JSON.stringify(result, null, 2));
         });
       }
