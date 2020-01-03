@@ -20,7 +20,7 @@ const _mergedDefaultOptions = (opts) => {
 }
 
 function GSS(url, opts) {
-  const { baseURL, settingPath, worksheetIndex, langPrefix } = opts;
+  const { baseURL, settingPath, worksheetIndex } = opts;
 
   const gssValidator = GSSValidator(url, baseURL);
   const configValidator = ConfigValidator(settingPath);
@@ -31,6 +31,7 @@ function GSS(url, opts) {
   opts = _mergedDefaultOptions(opts);
 
   var settingData = yamlSafeLoad(settingPath)
+    , langPrefix = settingData["sheet"]["gss"]["langPrefix"]
     , sheetSchema = settingData["sheet"]["gss"]["openAPIV3Schema"]["properties"]
     , headerData = Object.keys(sheetSchema)
     , headerHumanData = Object.keys(sheetSchema).map(key => { return sheetSchema[key]['description']; });
@@ -80,7 +81,7 @@ function GSS(url, opts) {
           resolve(sheet);
         });
       }).then(sheet => {
-        locale.getLocaleAll(result => {
+        locale.getLocaleAll(false, result => {
           var writeData = _createCellData(result);
           var writeCount = writeData.length;
 
@@ -139,7 +140,7 @@ function GSS(url, opts) {
           langIndex: headerData.findIndex(header => header === langName),
           keyIndex: headerData.findIndex(header => header === 'key'),
           langValue: langValue,
-          keyValue: trimLang(key, trimLang)
+          keyValue: trimLang(key, langPrefix)
         };
 
         data.push(itemResult);
