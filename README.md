@@ -11,7 +11,7 @@ npm install -g transtory
 ## 🚀 Tutorial
 
 ```bash
-transtory init
+trs init
 #
 # Configure .transtory
 #
@@ -20,20 +20,20 @@ transtory sheet fetch
 # Update locales from GoogleSpreadSheet
 transtory locale update
 # Get locale(ja) from local
-transtory locale get ja
+trs locale get ja
 # Get all locales from local
-transtory locale get
+trs locale get
 # Push GoogleSpreadSheet from Local
 transtory sheet push
 # Add locale
-transtory locale add en en.common.text.good_bye "Good Bye"
+trs locale add en en.common.text.good_bye "Good Bye"
 ```
 
 ## 📖 Usage
 
 ```bash
-$ transtory -h
-Usage: transtory [options] [command]
+$ trs -h
+Usage: trs [options] [command]
 
 transtory cli
 
