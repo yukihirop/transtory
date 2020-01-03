@@ -23,6 +23,10 @@ transtory locale update <your/GoogleSpreadSheet/URL>
 transtory locale get ja
 # Get all locales from local
 transtory locale get
+# Push GoogleSpreadSheet from Local
+transtory sheet push <your/GoogleSpreadSheet/URL>
+# Add locale
+transtory locale add en en.common.text.good_bye "Good Bye"
 ```
 
 ## 📖 Usage
