@@ -19,6 +19,14 @@ transtory init
 transtory sheet fetch <your/GoogleSpreadSheet/URL>
 # Update locales from GoogleSpreadSheet
 transtory locale update <your/GoogleSpreadSheet/URL>
+# Get locale(ja) from local
+transtory locale get ja
+# Get all locales from local
+transtory locale get
+# Push GoogleSpreadSheet from Local
+transtory sheet push <your/GoogleSpreadSheet/URL>
+# Add locale
+transtory locale add en en.common.text.good_bye "Good Bye"
 ```
 
 ## 📖 Usage
@@ -56,7 +64,7 @@ The default settings are as follows:
 
 ```yaml
 ---
-version: 1.0
+version: '1.0.0'
 sheet:
   gss:
     openAPIV3Schema:
@@ -71,8 +79,13 @@ sheet:
         key:
           type: string
           description: キー
+    langPrefix: true
 locale:
   distDirPath: ./dist/locales
 auth:
   credPath: ./creds.json
 ```
+
+Note: 
+
+The name "key" is a reserved word. Be sure to use this name.

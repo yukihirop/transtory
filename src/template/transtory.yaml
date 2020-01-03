@@ -1,5 +1,5 @@
 ---
-version: 1.0
+version: "1.0.0"
 sheet:
   gss:
     openAPIV3Schema:
@@ -14,6 +14,7 @@ sheet:
         key:
           type: string
           description: キー
+    langPrefix: true
 locale:
   distDirPath: ./dist/locales
 auth:

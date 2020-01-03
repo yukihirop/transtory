@@ -1,7 +1,4 @@
-module.exports = function GSSValidator(
-  uri,
-  baseURL
-) {
+function GSSValidator(uri, baseURL) {
   const isSpreadSheetURL = () => {
     if (!uri) {
       throw new Error(`Requres a vaid URL: ${uri}`);
@@ -15,6 +12,8 @@ module.exports = function GSSValidator(
   }
 
   return {
-    isSpreadSheetURL
+    isSpreadSheetURL,
   }
 }
+
+module.exports = GSSValidator;

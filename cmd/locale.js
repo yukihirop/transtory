@@ -23,10 +23,53 @@ function LocaleCmd() {
     )
     .action((url, options) => {
       const { type, worksheetIndex } = options;
-      transtory(url, {
+      transtory({
+        url: url,
         type: type
       }).Locale.update(worksheetIndex, (langFile) => {
         console.log(`updated locale file: ${langFile}`);
+      });
+    });
+
+  localeCmd
+    .command('get [langName]')
+    .description('get locale from local')
+    .option(
+      '-e, --extName <extName>',
+      'extension name',
+      'yaml'
+    )
+    .option(
+      '-f, --flat [flat]',
+      'display flatten',
+      false,
+    )
+    .action((langName, options) => {
+      const { extName, flat } = options;
+      const isFlatten = (flat === 'true') ? true : false;
+      if (langName) {
+        transtory().Locale.get(langName, extName, isFlatten, (result) => {
+          console.log(JSON.stringify(result, null, 2));
+        });
+      } else {
+        transtory().Locale.getAll(isFlatten, (result) => {
+          console.log(JSON.stringify(result, null, 2));
+        });
+      }
+    });
+
+  localeCmd
+    .command('add <langName> <key> <value>')
+    .description('add locale')
+    .option(
+      '-e, --extName <extName>',
+      'extension name',
+      'yaml'
+    )
+    .action((langName, key, value, options) => {
+      const { extname } = options;
+      transtory().Locale.add(key, value, langName, extname, (result) => {
+        console.log(JSON.stringify(result, null, 2));
       });
     });
 
