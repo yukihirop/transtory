@@ -2,7 +2,7 @@
 
 require('date-utils');
 
-const GoogleSpreadSheet = require('./sheets/GSS')
+const AppSheet = require('./Sheet')
   , AppLocale = require('./Locale')
 
 module.exports = function transtory(opts) {
@@ -21,12 +21,7 @@ module.exports = function transtory(opts) {
     , sheet = {};
 
   if (url) {
-
-    switch (type) {
-      case 'GoogleSpreadSheet':
-        sheet = GoogleSpreadSheet(url, options)
-        break;
-    }
+    sheet = AppSheet(url, options);
 
     Sheet.fetch = (worksheet_id = 1, callback) => {
       sheet.getRows(worksheet_id, rows => {
