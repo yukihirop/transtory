@@ -7,9 +7,9 @@ const {
   mkdirSyncRecursive,
   yamlSafeLoad,
   yamlDumpWriteSyncFile,
-  walk,
   absolutePath
 } = require('./utils/file');
+const Repository = require('./repository');
 
 const _mergedDefaultOptions = (opts) => {
   const defaultOpts = {};
@@ -21,7 +21,8 @@ function Locale(opts) {
 
   var { settingPath } = opts;
   var yamlData = yamlSafeLoad(settingPath)
-    , distDirPath = yamlData["locale"]["distDirPath"];
+    , distDirPath = yamlData["locale"]["distDirPath"]
+    , repo = new Repository(distDirPath, 'master');
 
   mkdirSyncRecursive(distDirPath);
 
@@ -84,11 +85,21 @@ function Locale(opts) {
     if (callback) callback({ [key]: writeData });
   }
 
+  const statusLocale = (callback) => {
+    repo.status(callback);
+  }
+
+  const commitLocale = (callback) => {
+    repo.commit(callback);
+  }
+
   return {
     updateLocale,
     getLocale,
     getLocaleAll,
-    addLocale
+    addLocale,
+    statusLocale,
+    commitLocale
   }
 }
 

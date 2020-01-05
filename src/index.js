@@ -55,6 +55,14 @@ module.exports = function transtory(opts) {
     locale.addLocale(key, value, langName, extName, callback)
   }
 
+  Locale.status = (callback) => {
+    locale.statusLocale(callback)
+  }
+
+  Locale.commit = (callback) => {
+    locale.commitLocale(callback)
+  }
+
   return {
     Sheet,
     Locale

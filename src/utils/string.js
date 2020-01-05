@@ -1,3 +1,5 @@
+'use strict';
+
 const trimLang = (str, flag = true) => {
   if (flag) {
     var arr = str.split('.');

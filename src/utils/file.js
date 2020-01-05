@@ -1,6 +1,7 @@
 const fs = require('fs')
   , path = require('path')
-  , yaml = require('js-yaml');
+  , yaml = require('js-yaml')
+  , { detailedDiff } = require('deep-object-diff');
 
 const currentPath = fs.realpathSync('./');
 
@@ -68,6 +69,21 @@ const absolutePath = (file) => {
   return path.resolve(currentPath, file);
 }
 
+const fileSafeLoad = (file, isRelative = true, encoding = 'utf-8') => {
+  var loadPath = file;
+
+  if (isRelative) {
+    loadPath = path.resolve(currentPath, file);
+  }
+
+  var text = fs.readFileSync(loadPath, encoding);
+  return text;
+}
+
+const basename = (file) => {
+  return path.basename(file);
+}
+
 module.exports = {
   isExistFile,
   writeSyncFile,
@@ -77,4 +93,6 @@ module.exports = {
   jsonSafeLoad,
   packageJSON,
   absolutePath,
+  fileSafeLoad,
+  basename,
 }

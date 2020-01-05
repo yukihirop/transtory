@@ -7,29 +7,39 @@ var client = transtory(
   }
 )
 
-client.Sheet.fetch(1, (result) => {
-  console.log(JSON.stringify(result));
-});
+// client.Sheet.fetch(1, (result) => {
+//   console.log(JSON.stringify(result));
+// });
 
-client.Locale.update(1);
+// client.Locale.update(1);
 
-client.Locale.get('ja', 'yaml', (result) => {
-  console.log(JSON.stringify(result));
-});
+// client.Locale.get('ja', 'yaml', (result) => {
+//   console.log(JSON.stringify(result));
+// });
 
-client.Locale.get('en', 'yaml', (result) => {
-  console.log(JSON.stringify(result));
-});
+// client.Locale.get('en', 'yaml', (result) => {
+//   console.log(JSON.stringify(result));
+// });
 
-client.Locale.getAll((result) => {
-  console.log(JSON.stringify(result, null, 2));
-});
+// client.Locale.getAll((result) => {
+//   console.log(JSON.stringify(result, null, 2));
+// });
 
-var formatDate = (new Date()).toFormat('YYYY/MM/DD HH24:MI:SS');
-client.Sheet.push(formatDate, (result) => {
-  console.log(result);
-});
+// var formatDate = (new Date()).toFormat('YYYY/MM/DD HH24:MI:SS');
+// client.Sheet.push(formatDate, (result) => {
+//   console.log(result);
+// });
 
-client.Locale.add('ja.common.text.good_bye', 'さようなら', 'ja', 'yaml', (result) => {
-  console.log(JSON.stringify(result, null, 2));
+// client.Locale.add('ja.common.text.good_bye', 'さようなら', 'ja', 'yaml', (result) => {
+//   console.log(JSON.stringify(result, null, 2));
+// });
+
+// client.Locale.status((files) => {
+//   console.log("Changes not staged for commit:\n");
+//   console.log(files.join('\n'));
+// });
+
+client.Locale.commit((diff, file) => {
+  console.log("committed!")
+  console.log(diff);
 });
