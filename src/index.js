@@ -4,6 +4,7 @@ require('date-utils');
 
 const AppSheet = require('./Sheet')
   , AppLocale = require('./Locale')
+  , AppRepository = require('./Repository');
 
 module.exports = function transtory(opts) {
   const defaultOpts = {
@@ -16,8 +17,10 @@ module.exports = function transtory(opts) {
   const options = Object.assign({}, defaultOpts, opts);
   var Sheet = {}
     , Locale = {}
+    , Repository = {}
     , sheet = AppSheet(options)
-    , locale = AppLocale(options);
+    , locale = AppLocale(options)
+    , repo = new AppRepository(options);
 
   Sheet.fetch = (worksheet_id = 1) => {
     return new Promise((resolve, reject) => {
@@ -58,8 +61,25 @@ module.exports = function transtory(opts) {
     return locale.addLocale(key, value, langName, extName)
   }
 
+  Repository.status = (callback) => {
+    repo.status(callback)
+  }
+
+  Repository.add = (callback) => {
+    repo.add(callback)
+  }
+
+  Repository.commit = (callback) => {
+    repo.commit(callback)
+  }
+
+  Repository.push = (callback) => {
+    repo.push(callback)
+  }
+
   return {
     Sheet,
-    Locale
+    Locale,
+    Repository
   }
 }

@@ -69,7 +69,7 @@ function GSS(opts) {
     });
   };
 
-  const pushRows = (worksheetName = (new Date()).toFormat('YYYY/MM/DD HH24:MI:SS'), callback) => {
+  const pushRows = (worksheetName = (new Date()).toFormat('YYYY/MM/DD HH24:MI:SS'), commitData, callback) => {
     return client.then(doc => {
       new Promise((resolve, reject) => {
         doc.addWorksheet({
@@ -85,6 +85,7 @@ function GSS(opts) {
           _bulkPushRow(sheet, worksheet.bulkData(result));
           if (callback) callback(worksheet.rowArr(result));
         });
+        process.emit('WriteGSS', 0);
       });
     });
   }
@@ -111,6 +112,7 @@ function GSS(opts) {
 
   const _bulkPushRow = (sheet, data, callback) => {
     const maxRowCount = Math.ceil(Object.keys(data).length / _languages(sheetSchema).length)
+
     sheet.getCells({
       'min-row': 2,
       'max-row': maxRowCount,

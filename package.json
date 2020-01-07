@@ -8,12 +8,14 @@
   "dependencies": {
     "commander": "^4.0.1",
     "date-utils": "^1.2.21",
+    "deep-object-diff": "^1.1.0",
     "deepmerge": "^4.2.2",
     "flat": "^5.0.0",
     "google-spreadsheet": "^2.0.8",
     "js-yaml": "^3.13.1",
     "nested-property": "^1.0.2",
-    "recursive-readdir": "^2.2.2"
+    "recursive-readdir": "^2.2.2",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",

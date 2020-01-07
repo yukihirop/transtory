@@ -7,7 +7,6 @@ const {
   mkdirSyncRecursive,
   yamlSafeLoad,
   yamlDumpWriteSyncFile,
-  walk,
   absolutePath
 } = require('./utils/file');
 
@@ -21,7 +20,7 @@ function Locale(opts) {
 
   var { settingPath } = opts;
   var yamlData = yamlSafeLoad(settingPath)
-    , distDirPath = yamlData["locale"]["distDirPath"];
+    , distDirPath = yamlData["locale"]["distDirPath"]
 
   mkdirSyncRecursive(distDirPath);
 
