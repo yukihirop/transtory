@@ -19,8 +19,15 @@ const _mergedDefaultOptions = (opts) => {
   return Object.assign({}, defaultOpts, opts)
 }
 
-function GSS(url, opts) {
+function GSS(opts) {
   const { baseURL, settingPath, worksheetIndex } = opts;
+
+  var settingData = yamlSafeLoad(settingPath)
+    , url = settingData["sheet"]["gss"]["url"]
+    , langPrefix = settingData["sheet"]["gss"]["langPrefix"]
+    , sheetSchema = settingData["sheet"]["gss"]["openAPIV3Schema"]["properties"]
+    , headerData = Object.keys(sheetSchema)
+    , headerHumanData = Object.keys(sheetSchema).map(key => { return sheetSchema[key]['description']; });
 
   const gssValidator = GSSValidator(url, baseURL);
   const configValidator = ConfigValidator(settingPath);
@@ -29,12 +36,6 @@ function GSS(url, opts) {
   configValidator.isVersion();
 
   opts = _mergedDefaultOptions(opts);
-
-  var settingData = yamlSafeLoad(settingPath)
-    , langPrefix = settingData["sheet"]["gss"]["langPrefix"]
-    , sheetSchema = settingData["sheet"]["gss"]["openAPIV3Schema"]["properties"]
-    , headerData = Object.keys(sheetSchema)
-    , headerHumanData = Object.keys(sheetSchema).map(key => { return sheetSchema[key]['description']; });
 
   const client = Client(url, opts);
   const locale = new Locale(opts);

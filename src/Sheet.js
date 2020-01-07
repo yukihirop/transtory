@@ -1,11 +1,11 @@
 const GoogleSpreadSheet = require('./sheets/GSS');
 
-function Sheet(url, opts) {
+function Sheet(opts) {
   const { type } = opts;
 
   switch (type) {
     case 'GoogleSpreadSheet':
-      sheet = GoogleSpreadSheet(url, opts);
+      sheet = GoogleSpreadSheet(opts);
       break;
   }
 

@@ -9,7 +9,7 @@ function LocaleCmd() {
     .description('locale utils');
 
   localeCmd
-    .command('update <url>')
+    .command('update')
     .description('update locales from Sheet')
     .option(
       '-t, --type <type>',
@@ -21,10 +21,9 @@ function LocaleCmd() {
       'worksheet Index',
       1
     )
-    .action((url, options) => {
+    .action((options) => {
       const { type, worksheetIndex } = options;
       transtory({
-        url: url,
         type: type
       }).Locale.update(worksheetIndex, (langFile) => {
         console.log(`updated locale file: ${langFile}`);

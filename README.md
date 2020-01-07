@@ -67,6 +67,7 @@ The default settings are as follows:
 version: '1.0.0'
 sheet:
   gss:
+    url: <your/GoogleSpreadSheet/url>
     openAPIV3Schema:
       type: object
       properties:
@@ -86,6 +87,6 @@ auth:
   credPath: ./creds.json
 ```
 
-Note: 
+Note:
 
 The name "key" is a reserved word. Be sure to use this name.
