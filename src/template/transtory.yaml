@@ -2,6 +2,7 @@
 version: "1.0.0"
 sheet:
   gss:
+    url: <your/GoogleSpreadSheet/url>
     openAPIV3Schema:
       type: object
       properties:
