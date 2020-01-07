@@ -16,15 +16,15 @@ transtory init
 # Configure .transtory
 #
 # Fetch rows from GoogleSpreadSheet
-transtory sheet fetch <your/GoogleSpreadSheet/URL>
+transtory sheet fetch
 # Update locales from GoogleSpreadSheet
-transtory locale update <your/GoogleSpreadSheet/URL>
+transtory locale update
 # Get locale(ja) from local
 transtory locale get ja
 # Get all locales from local
 transtory locale get
 # Push GoogleSpreadSheet from Local
-transtory sheet push <your/GoogleSpreadSheet/URL>
+transtory sheet push
 # Add locale
 transtory locale add en en.common.text.good_bye "Good Bye"
 ```
