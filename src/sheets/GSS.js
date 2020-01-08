@@ -2,15 +2,13 @@
 
 require('date-utils');
 
-const flatten = require('flat');
-
 const GSSValidator = require('../validators/GSSValidator');
 const ConfigValidator = require('../validators/ConfigValidator');
 const Client = require('./GSSClient');
 const nestedProperty = require('nested-property');
 const { yamlSafeLoad } = require('../utils/file');
-const { trimLang } = require('../utils/string');
 const Locale = require('../Locale');
+const Worksheet = require('./Worksheet');
 
 const _mergedDefaultOptions = (opts) => {
   const defaultOpts = {
@@ -39,6 +37,7 @@ function GSS(opts) {
 
   const client = Client(url, opts);
   const locale = new Locale(opts);
+  const worksheet = new Worksheet(headerData, langPrefix);
 
   const getInfo = (callback) => {
     return client.then(doc => {
@@ -83,22 +82,8 @@ function GSS(opts) {
         });
       }).then(sheet => {
         locale.getLocaleAll(false).then(result => {
-          var writeData = _createCellData(result);
-          var writeCount = writeData.length;
-
-          process.on('WriteGSS', c => {
-            if (c > writeCount - 1) {
-              return;
-            }
-
-            var data = writeData.shift();
-            _pushRow(sheet, data, (result) => {
-              callback(result);
-              process.emit('WriteGSS', ++c);
-            });
-          });
-
-          process.emit('WriteGSS', 0);
+          _bulkPushRow(sheet, worksheet.bulkData(result));
+          if (callback) callback(worksheet.rowArr(result));
         });
       });
     });
@@ -124,45 +109,28 @@ function GSS(opts) {
 
   // private
 
-  const _createCellData = (result) => {
-    var data = [];
-
-    Object.keys(result).forEach((langName, langIndex) => {
-      var langResult = {};
-      langResult[langName] = result[langName];
-      var flatternLangResult = flatten(langResult);
-
-      Object.keys(flatternLangResult).forEach((key, itemIndex) => {
-        var langValue = flatternLangResult[key]
-          , itemResult = {};
-
-        itemResult = {
-          rowNum: itemIndex + 2,
-          langIndex: headerData.findIndex(header => header === langName),
-          keyIndex: headerData.findIndex(header => header === 'key'),
-          langValue: langValue,
-          keyValue: trimLang(key, langPrefix)
-        };
-
-        data.push(itemResult);
-      });
-    });
-
-    return data;
-  }
-
-  const _pushRow = (sheet, data, callback) => {
-    const { rowNum, langIndex, keyIndex, langValue, keyValue } = data;
+  const _bulkPushRow = (sheet, data, callback) => {
+    const maxRowCount = Math.ceil(Object.keys(data).length / _languages(sheetSchema).length)
     sheet.getCells({
-      'min-row': rowNum,
+      'min-row': 2,
+      'max-row': maxRowCount,
       'return-empty': true
     }, (err, cells) => {
-      if (err) throw err;
+        if (err) throw err;
 
-      cells[langIndex].value = langValue;
-      cells[keyIndex].value = keyValue;
-      sheet.bulkUpdateCells(cells);
-      if (callback) callback(data);
+        // i is itemIndex
+        const colCount = sheet.colCount;
+        for (let i = 0; i < cells.length / colCount; ++i) {
+          // j is langIndex or keyIndex
+          for (let j = 0; j < colCount; ++j) {
+            var el = data[`${i}_${j}`];
+            if (typeof el !== 'undefined') {
+              cells[i * colCount + j].value = el.value
+            }
+          }
+        }
+
+        sheet.bulkUpdateCells(cells);
     });
   }
 
