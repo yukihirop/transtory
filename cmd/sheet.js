@@ -25,7 +25,7 @@ function SheetCmd() {
       const { type, worksheetIndex } = options;
       transtory({
         type: type
-      }).Sheet.fetch(worksheetIndex, (result) => {
+      }).Sheet.fetch(worksheetIndex).then(result => {
         console.log(JSON.stringify(result, null, 2));
       });
     });

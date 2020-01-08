@@ -2,7 +2,7 @@ const transtory = require('../src/index');
 
 var client = transtory()
 
-client.Sheet.fetch(1, (result) => {
+client.Sheet.fetch(1).then(result => {
   console.log(JSON.stringify(result));
 });
 
