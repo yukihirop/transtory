@@ -15,7 +15,8 @@ const {
   mkdirSyncRecursive,
   writeSyncFile
 } = require('./utils/file');
-const AppSheet = require('./Sheet');
+const AppSheet = require('./Sheet')
+  , AppLocale = require('./Locale');
 
 const INITIAL_COMMIT_HASH = '00000000000000000000000000000000';
 
@@ -32,6 +33,7 @@ function Repository(opts) {
     , fullRefPathAtHEAD = `${fullTrsPath}/HEAD`;
 
   const sheet = AppSheet(opts);
+  const locale = AppLocale(opts);
 
   const status = (callback) => {
     recursive(fullDistDirPath, (err, files) => {
@@ -77,8 +79,8 @@ function Repository(opts) {
       , fileName = ''
       , fullSavePath = ''
       , diffData = {}
-      , fullCommitPathAtADD = `${fullTrsPath}/objects/${_readCommitHash('ADD')}`
-      , fullCommitPath = `${fullTrsPath}/objects/${hash}`;
+      , fullCommitPathAtADD = `${fullObjectPath}/${_readCommitHash('ADD')}`
+      , fullCommitPath = `${fullObjectPath}/${hash}`;
 
     mkdirSyncRecursive(fullCommitPath);
     recursive(fullCommitPathAtADD, (err, files) => {
@@ -119,6 +121,10 @@ function Repository(opts) {
     const orig = _dataAt(`${fullObjectPath}/${_readCommitHash(state)}/${fileName}`);
     const local = _dataAt(`${fullDistDirPath}/${fileName}`);
     return detailedDiff(orig, local);
+  }
+
+  const _isDiffAt = async (state) => {
+    const dataAt = await _mergedDataAt(state)
   }
 
   const _dataAt = (filePath) => {

@@ -18,7 +18,7 @@ client.Locale.get('en', 'yaml').then(result => {
   console.log(JSON.stringify(result));
 });
 
-client.Locale.getAll().then(result => {
+client.Locale.getAll(false).then(result => {
   console.log(JSON.stringify(result, null, 2));
 });
 
@@ -48,7 +48,7 @@ client.Locale.add('ja.common.text.good_bye', 'さようなら', 'ja', 'yaml').th
 //   console.log(diff);
 // });
 
-client.Repository.push((result) => {
-  console.log("pushed!");
-  console.log(result);
-});
+// client.Repository.push((result) => {
+//   console.log("pushed!");
+//   console.log(result);
+// });
