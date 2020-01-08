@@ -48,7 +48,9 @@ function SheetCmd() {
       transtory({
         type: type
       }).Sheet.push(name).then(result => {
-        console.log(result);
+        result.forEach(data => {
+          console.log("Row: %d\tColumn: %d\tLang: %s\tValue: %s\tKey: %s", data['rowNum'], data['langIndex'] + 1, data['langName'], data['langValue'], data['keyValue'])
+        })
       });
     });
 

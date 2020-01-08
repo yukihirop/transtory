@@ -2,16 +2,13 @@
 
 require('date-utils');
 
-const flatten = require('flat');
-const merge = require('deepmerge');
-
 const GSSValidator = require('../validators/GSSValidator');
 const ConfigValidator = require('../validators/ConfigValidator');
 const Client = require('./GSSClient');
 const nestedProperty = require('nested-property');
 const { yamlSafeLoad } = require('../utils/file');
-const { trimLang } = require('../utils/string');
 const Locale = require('../Locale');
+const Worksheet = require('./Worksheet');
 
 const _mergedDefaultOptions = (opts) => {
   const defaultOpts = {
@@ -40,6 +37,7 @@ function GSS(opts) {
 
   const client = Client(url, opts);
   const locale = new Locale(opts);
+  const worksheet = new Worksheet(headerData, langPrefix);
 
   const getInfo = (callback) => {
     return client.then(doc => {
@@ -84,10 +82,8 @@ function GSS(opts) {
         });
       }).then(sheet => {
         locale.getLocaleAll(false).then(result => {
-          var data = _bulkCreateCellData(result);
-          _bulkPushRow(sheet, data);
-
-          if (callback) callback(data);
+          _bulkPushRow(sheet, worksheet.bulkData(result));
+          if (callback) callback(worksheet.rowArr(result));
         });
       });
     });
@@ -113,42 +109,6 @@ function GSS(opts) {
 
   // private
 
-  const _bulkCreateCellData = (result) => {
-    var data = {}
-
-    Object.keys(result).forEach((langName, langIndex) => {
-      var langResult = {};
-      langResult[langName] = result[langName];
-      var flatternLangResult = flatten(langResult);
-
-      Object.keys(flatternLangResult).forEach((key, itemIndex) => {
-        var langValue = flatternLangResult[key]
-          , langIndex = headerData.findIndex(header => header === langName)
-          , keyIndex = headerData.findIndex(header => header === 'key')
-          , itemKey = `${itemIndex}_${langIndex}`
-          , keyKey = `${itemIndex}_${keyIndex}`
-          , itemResult = {};
-
-        itemResult[itemKey] = {};
-        itemResult[keyKey] = {};
-
-        itemResult[itemKey].rowNum = itemIndex;
-        itemResult[itemKey].colNum = langIndex;
-        itemResult[itemKey].value = langValue;
-        itemResult[itemKey].type = 'item';
-
-        itemResult[keyKey].rowNum = itemIndex;
-        itemResult[keyKey].colNum = keyIndex;
-        itemResult[keyKey].value = trimLang(key, langPrefix);
-        itemResult[keyKey].type = 'key';
-
-        data = merge(data, itemResult);
-      });
-    });
-
-    return data;
-  }
-
   const _bulkPushRow = (sheet, data, callback) => {
     const maxRowCount = Math.ceil(Object.keys(data).length / _languages(sheetSchema).length)
     sheet.getCells({
@@ -171,7 +131,6 @@ function GSS(opts) {
         }
 
         sheet.bulkUpdateCells(cells);
-        if (callback) callback(data);
     });
   }
 
