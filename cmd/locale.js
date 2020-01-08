@@ -49,11 +49,11 @@ function LocaleCmd() {
       const { extName, flat } = options;
       const isFlatten = (flat === 'true') ? true : false;
       if (langName) {
-        transtory().Locale.get(langName, extName, isFlatten, (result) => {
+        transtory().Locale.get(langName, extName, isFlatten).then(result => {
           console.log(JSON.stringify(result, null, 2));
         });
       } else {
-        transtory().Locale.getAll(isFlatten, (result) => {
+        transtory().Locale.getAll(isFlatten).then(result => {
           console.log(JSON.stringify(result, null, 2));
         });
       }

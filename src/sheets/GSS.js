@@ -82,7 +82,7 @@ function GSS(opts) {
           resolve(sheet);
         });
       }).then(sheet => {
-        locale.getLocaleAll(false, result => {
+        locale.getLocaleAll(false).then(result => {
           var writeData = _createCellData(result);
           var writeCount = writeData.length;
 

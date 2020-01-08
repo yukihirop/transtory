@@ -42,12 +42,12 @@ module.exports = function transtory(opts) {
     })
   }
 
-  Locale.get = (langName, extName = 'yaml', isFlatten, callback) => {
-    locale.getLocale(langName, extName, isFlatten, callback)
+  Locale.get = (langName, extName = 'yaml', isFlatten) => {
+    return locale.getLocale(langName, extName, isFlatten)
   }
 
-  Locale.getAll = (isFlatten, callback) => {
-    locale.getLocaleAll(isFlatten, callback)
+  Locale.getAll = (isFlatten) => {
+    return locale.getLocaleAll(isFlatten)
   }
 
   Locale.add = (key, value, langName, extName = 'yaml', callback) => {

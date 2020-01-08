@@ -10,15 +10,15 @@ client.Locale.update(1).then(result => {
   console.log(result);
 });
 
-client.Locale.get('ja', 'yaml', (result) => {
+client.Locale.get('ja', 'yaml').then(result => {
   console.log(JSON.stringify(result));
 });
 
-client.Locale.get('en', 'yaml', (result) => {
+client.Locale.get('en', 'yaml').then(result => {
   console.log(JSON.stringify(result));
 });
 
-client.Locale.getAll((result) => {
+client.Locale.getAll().then(result => {
   console.log(JSON.stringify(result, null, 2));
 });
 
