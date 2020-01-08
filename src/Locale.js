@@ -29,16 +29,26 @@ function Locale(opts) {
     e.x.)
     result = {"ja":{"common":{"text":{"hello":"こんにちは","good_night":"おやすみなさい"}}},"en":{"common":{"text":{"hello":"hello","good_night":"good night"}}}}
   */
-  const updateLocale = (result, callback) => {
+  const updateLocale = (result) => {
+    var promises = [];
+
     Object.keys(result).forEach(lang => {
-      const langFile = `${distDirPath}/${lang}.yaml`;
+      var promise = new Promise((resolve, reject) => {
+        try {
+          const langFile = `${distDirPath}/${lang}.yaml`;
+          var langResult = {};
+          langResult[lang] = result[lang];
+          yamlDumpWriteSyncFile(langFile, langResult);
 
-      var langResult = {};
-      langResult[lang] = result[lang];
-      yamlDumpWriteSyncFile(langFile, langResult);
-
-      if (callback) callback(langFile);
+          resolve(langFile);
+        } catch (err) {
+          reject(err)
+        }
+      });
+      promises.push(promise)
     });
+
+    return Promise.all(promises);
   }
 
   const getLocale = (langName, extName = 'yaml', isFlatten = false, callback) => {

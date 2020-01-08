@@ -6,7 +6,9 @@ client.Sheet.fetch(1, (result) => {
   console.log(JSON.stringify(result));
 });
 
-client.Locale.update(1);
+client.Locale.update(1).then(result => {
+  console.log(result);
+});
 
 client.Locale.get('ja', 'yaml', (result) => {
   console.log(JSON.stringify(result));

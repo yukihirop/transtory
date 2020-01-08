@@ -30,12 +30,14 @@ module.exports = function transtory(opts) {
     sheet.pushRows(worksheetName, callback);
   }
 
-  Locale.update = (worksheet_id = 1, callback) => {
-    Sheet.fetch(worksheet_id, (result) => {
-      locale.updateLocale(result, langFile => {
-        if (callback) callback(langFile);
+  Locale.update = (worksheet_id = 1) => {
+    return new Promise((resolve, reject) => {
+      Sheet.fetch(worksheet_id, (result) => {
+        locale.updateLocale(result).then(files => {
+          resolve(files)
+        });
       });
-    });
+    })
   }
 
   Locale.get = (langName, extName = 'yaml', isFlatten, callback) => {

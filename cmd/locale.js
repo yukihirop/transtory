@@ -25,8 +25,10 @@ function LocaleCmd() {
       const { type, worksheetIndex } = options;
       transtory({
         type: type
-      }).Locale.update(worksheetIndex, (langFile) => {
-        console.log(`updated locale file: ${langFile}`);
+      }).Locale.update(worksheetIndex).then(langFiles => {
+        langFiles.forEach(langFile => {
+          console.log(`updated locale file: ${langFile}`);
+        })
       });
     });
 
