@@ -29,59 +29,81 @@ function Locale(opts) {
     e.x.)
     result = {"ja":{"common":{"text":{"hello":"こんにちは","good_night":"おやすみなさい"}}},"en":{"common":{"text":{"hello":"hello","good_night":"good night"}}}}
   */
-  const updateLocale = (result, callback) => {
+  const updateLocale = (result) => {
+    var promises = [];
+
     Object.keys(result).forEach(lang => {
-      const langFile = `${distDirPath}/${lang}.yaml`;
+      var promise = new Promise((resolve, reject) => {
+        try {
+          const langFile = `${distDirPath}/${lang}.yaml`;
+          var langResult = {};
+          langResult[lang] = result[lang];
+          yamlDumpWriteSyncFile(langFile, langResult);
 
-      var langResult = {};
-      langResult[lang] = result[lang];
-      yamlDumpWriteSyncFile(langFile, langResult);
+          resolve(langFile);
+        } catch (err) {
+          reject(err)
+        }
+      });
+      promises.push(promise)
+    });
 
-      if (callback) callback(langFile);
+    return Promise.all(promises);
+  }
+
+  const getLocale = (langName, extName = 'yaml', isFlatten = false) => {
+    return new Promise((resolve, reject) => {
+      try {
+        var yamlData = yamlSafeLoad(`${distDirPath}/${langName}.${extName}`);
+        if (isFlatten) {
+          yamlData = flatten(yamlData);
+        }
+        resolve(yamlData);
+      } catch (err) {
+        reject(err);
+      }
     });
   }
 
-  const getLocale = (langName, extName = 'yaml', isFlatten = false, callback) => {
-    var yamlData = yamlSafeLoad(`${distDirPath}/${langName}.${extName}`);
-
-    if (isFlatten) {
-      yamlData = flatten(yamlData);
-    }
-
-    if (callback) callback(yamlData);
-  }
-
-  const getLocaleAll = (isFlatten = false, callback) => {
+  const getLocaleAll = (isFlatten = false) => {
     var fullPath = absolutePath(distDirPath)
       , result = {}
       , yamlData = {};
 
-    recursive(fullPath, (err, files) => {
-      if (err) throw err;
+    return new Promise((resolve, reject) => {
+      recursive(fullPath, (err, files) => {
+        if (err) reject(err);
 
-      result = files.reduce((acc, file) => {
-        yamlData = yamlSafeLoad(file, false);
-        Object.assign(acc, yamlData);
+        result = files.reduce((acc, file) => {
+          yamlData = yamlSafeLoad(file, false);
+          Object.assign(acc, yamlData);
 
-        if (isFlatten) {
-          acc = flatten(acc);
-        }
+          if (isFlatten) {
+            acc = flatten(acc);
+          }
 
-        return acc;
-      }, {});
+          return acc;
+        }, {});
 
-      if (callback) callback(result);
-    })
+        resolve(result);
+      });
+    });
   }
 
-  const addLocale = (key, value, langName, extName = 'yaml', callback) => {
-    const langFile = `${distDirPath}/${langName}.${extName}`;
-    const yamlData = yamlSafeLoad(langFile);
-    nestedProperty.set(yamlData, key, value);
-    yamlDumpWriteSyncFile(langFile, yamlData);
+  const addLocale = (key, value, langName, extName = 'yaml') => {
+    return new Promise((resolve, reject) => {
+      try {
+        const langFile = `${distDirPath}/${langName}.${extName}`;
+        const yamlData = yamlSafeLoad(langFile);
+        nestedProperty.set(yamlData, key, value);
+        yamlDumpWriteSyncFile(langFile, yamlData);
 
-    const writeData = nestedProperty.get(yamlData, key);
-    if (callback) callback({ [key]: writeData });
+        const writeData = nestedProperty.get(yamlData, key);
+        resolve({ [key]: writeData });
+      } catch (err) {
+        reject(err);
+      }
+    });
   }
 
   return {

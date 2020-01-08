@@ -25,8 +25,10 @@ function LocaleCmd() {
       const { type, worksheetIndex } = options;
       transtory({
         type: type
-      }).Locale.update(worksheetIndex, (langFile) => {
-        console.log(`updated locale file: ${langFile}`);
+      }).Locale.update(worksheetIndex).then(langFiles => {
+        langFiles.forEach(langFile => {
+          console.log(`updated locale file: ${langFile}`);
+        })
       });
     });
 
@@ -47,11 +49,11 @@ function LocaleCmd() {
       const { extName, flat } = options;
       const isFlatten = (flat === 'true') ? true : false;
       if (langName) {
-        transtory().Locale.get(langName, extName, isFlatten, (result) => {
+        transtory().Locale.get(langName, extName, isFlatten).then(result => {
           console.log(JSON.stringify(result, null, 2));
         });
       } else {
-        transtory().Locale.getAll(isFlatten, (result) => {
+        transtory().Locale.getAll(isFlatten).then(result => {
           console.log(JSON.stringify(result, null, 2));
         });
       }
@@ -67,7 +69,7 @@ function LocaleCmd() {
     )
     .action((langName, key, value, options) => {
       const { extname } = options;
-      transtory().Locale.add(key, value, langName, extname, (result) => {
+      transtory().Locale.add(key, value, langName, extname).then(result => {
         console.log(JSON.stringify(result, null, 2));
       });
     });
