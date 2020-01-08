@@ -3,6 +3,7 @@
 require('date-utils');
 
 const flatten = require('flat');
+const merge = require('deepmerge');
 
 const GSSValidator = require('../validators/GSSValidator');
 const ConfigValidator = require('../validators/ConfigValidator');
@@ -83,22 +84,10 @@ function GSS(opts) {
         });
       }).then(sheet => {
         locale.getLocaleAll(false).then(result => {
-          var writeData = _createCellData(result);
-          var writeCount = writeData.length;
+          var data = _bulkCreateCellData(result);
+          _bulkPushRow(sheet, data);
 
-          process.on('WriteGSS', c => {
-            if (c > writeCount - 1) {
-              return;
-            }
-
-            var data = writeData.shift();
-            _pushRow(sheet, data, (result) => {
-              callback(result);
-              process.emit('WriteGSS', ++c);
-            });
-          });
-
-          process.emit('WriteGSS', 0);
+          if (callback) callback(data);
         });
       });
     });
@@ -124,8 +113,8 @@ function GSS(opts) {
 
   // private
 
-  const _createCellData = (result) => {
-    var data = [];
+  const _bulkCreateCellData = (result) => {
+    var data = {}
 
     Object.keys(result).forEach((langName, langIndex) => {
       var langResult = {};
@@ -134,35 +123,55 @@ function GSS(opts) {
 
       Object.keys(flatternLangResult).forEach((key, itemIndex) => {
         var langValue = flatternLangResult[key]
+          , langIndex = headerData.findIndex(header => header === langName)
+          , keyIndex = headerData.findIndex(header => header === 'key')
+          , itemKey = `${itemIndex}_${langIndex}`
+          , keyKey = `${itemIndex}_${keyIndex}`
           , itemResult = {};
 
-        itemResult = {
-          rowNum: itemIndex + 2,
-          langIndex: headerData.findIndex(header => header === langName),
-          keyIndex: headerData.findIndex(header => header === 'key'),
-          langValue: langValue,
-          keyValue: trimLang(key, langPrefix)
-        };
+        itemResult[itemKey] = {};
+        itemResult[keyKey] = {};
 
-        data.push(itemResult);
+        itemResult[itemKey].rowNum = itemIndex;
+        itemResult[itemKey].colNum = langIndex;
+        itemResult[itemKey].value = langValue;
+        itemResult[itemKey].type = 'item';
+
+        itemResult[keyKey].rowNum = itemIndex;
+        itemResult[keyKey].colNum = keyIndex;
+        itemResult[keyKey].value = trimLang(key, langPrefix);
+        itemResult[keyKey].type = 'key';
+
+        data = merge(data, itemResult);
       });
     });
 
     return data;
   }
 
-  const _pushRow = (sheet, data, callback) => {
-    const { rowNum, langIndex, keyIndex, langValue, keyValue } = data;
+  const _bulkPushRow = (sheet, data, callback) => {
+    const maxRowCount = Math.ceil(Object.keys(data).length / _languages(sheetSchema).length)
     sheet.getCells({
-      'min-row': rowNum,
+      'min-row': 2,
+      'max-row': maxRowCount,
       'return-empty': true
     }, (err, cells) => {
-      if (err) throw err;
+        if (err) throw err;
 
-      cells[langIndex].value = langValue;
-      cells[keyIndex].value = keyValue;
-      sheet.bulkUpdateCells(cells);
-      if (callback) callback(data);
+        // i is itemIndex
+        const colCount = sheet.colCount;
+        for (let i = 0; i < cells.length / colCount; ++i) {
+          // j is langIndex or keyIndex
+          for (let j = 0; j < colCount; ++j) {
+            var el = data[`${i}_${j}`];
+            if (typeof el !== 'undefined') {
+              cells[i * colCount + j].value = el.value
+            }
+          }
+        }
+
+        sheet.bulkUpdateCells(cells);
+        if (callback) callback(data);
     });
   }
 

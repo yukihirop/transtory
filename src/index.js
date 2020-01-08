@@ -28,8 +28,12 @@ module.exports = function transtory(opts) {
     })
   }
 
-  Sheet.push = (worksheetName = (new Date()).toFormat('YYYY/MM/DD HH24:MI:SS'), callback) => {
-    sheet.pushRows(worksheetName, callback);
+  Sheet.push = (worksheetName = (new Date()).toFormat('YYYY/MM/DD HH24:MI:SS')) => {
+    return new Promise((resolve, reject) => {
+      sheet.pushRows(worksheetName, (data) => {
+        resolve(data);
+      });
+    })
   }
 
   Locale.update = (worksheet_id = 1) => {

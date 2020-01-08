@@ -47,8 +47,8 @@ function SheetCmd() {
       const { type, name } = options;
       transtory({
         type: type
-      }).Sheet.push(name, result => {
-        console.log("Row: %d\tColumn: %d\tValue: %s\tKey: %s", result['rowNum'], result['langIndex'] + 1, result['langValue'], result['keyValue'])
+      }).Sheet.push(name).then(result => {
+        console.log(result);
       });
     });
 

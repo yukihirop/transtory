@@ -23,7 +23,7 @@ client.Locale.getAll().then(result => {
 });
 
 var formatDate = (new Date()).toFormat('YYYY/MM/DD HH24:MI:SS');
-client.Sheet.push(formatDate, (result) => {
+client.Sheet.push(formatDate).then(result => {
   console.log(result);
 });
 
