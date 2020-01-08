@@ -69,7 +69,7 @@ function LocaleCmd() {
     )
     .action((langName, key, value, options) => {
       const { extname } = options;
-      transtory().Locale.add(key, value, langName, extname, (result) => {
+      transtory().Locale.add(key, value, langName, extname).then(result => {
         console.log(JSON.stringify(result, null, 2));
       });
     });

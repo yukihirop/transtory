@@ -27,6 +27,6 @@ client.Sheet.push(formatDate, (result) => {
   console.log(result);
 });
 
-client.Locale.add('ja.common.text.good_bye', 'さようなら', 'ja', 'yaml', (result) => {
+client.Locale.add('ja.common.text.good_bye', 'さようなら', 'ja', 'yaml').then(result => {
   console.log(JSON.stringify(result, null, 2));
 });

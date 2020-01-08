@@ -90,14 +90,20 @@ function Locale(opts) {
     });
   }
 
-  const addLocale = (key, value, langName, extName = 'yaml', callback) => {
-    const langFile = `${distDirPath}/${langName}.${extName}`;
-    const yamlData = yamlSafeLoad(langFile);
-    nestedProperty.set(yamlData, key, value);
-    yamlDumpWriteSyncFile(langFile, yamlData);
+  const addLocale = (key, value, langName, extName = 'yaml') => {
+    return new Promise((resolve, reject) => {
+      try {
+        const langFile = `${distDirPath}/${langName}.${extName}`;
+        const yamlData = yamlSafeLoad(langFile);
+        nestedProperty.set(yamlData, key, value);
+        yamlDumpWriteSyncFile(langFile, yamlData);
 
-    const writeData = nestedProperty.get(yamlData, key);
-    if (callback) callback({ [key]: writeData });
+        const writeData = nestedProperty.get(yamlData, key);
+        resolve({ [key]: writeData });
+      } catch (err) {
+        reject(err);
+      }
+    });
   }
 
   return {

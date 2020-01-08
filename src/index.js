@@ -50,8 +50,8 @@ module.exports = function transtory(opts) {
     return locale.getLocaleAll(isFlatten)
   }
 
-  Locale.add = (key, value, langName, extName = 'yaml', callback) => {
-    locale.addLocale(key, value, langName, extName, callback)
+  Locale.add = (key, value, langName, extName = 'yaml') => {
+    return locale.addLocale(key, value, langName, extName)
   }
 
   return {
