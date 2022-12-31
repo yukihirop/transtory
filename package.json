@@ -9,7 +9,7 @@
     "commander": "^4.0.1",
     "date-utils": "^1.2.21",
     "deepmerge": "^4.2.2",
-    "flat": "^5.0.0",
+    "flat": "^5.0.1",
     "google-spreadsheet": "^2.0.8",
     "js-yaml": "^3.13.1",
     "nested-property": "^1.0.2",
